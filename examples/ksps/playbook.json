@@ -1,0 +1,5 @@
+{
+  "id": "ksps",
+  "nama": "KSPS (SIM KSPSTK)",
+  "eventSubmitTambahan": "^click_.*_kirim_bkn$|^click_demand_ks_petakan$"
+}

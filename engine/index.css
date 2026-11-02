@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+/* Popover Driver.js disesuaikan dengan tema */
+.driver-popover.playbook-popover {
+  max-width: 380px;
+  border-radius: 12px;
+  font-family: var(--font-sans);
+}
+.driver-popover.playbook-popover .driver-popover-title {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  word-break: break-all;
+}
