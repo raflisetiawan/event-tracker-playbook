@@ -1,6 +1,6 @@
 ---
 name: 6-ekspor
-description: Ekspor usulan ke Excel dan siapkan web untuk dibagikan. Pakai saat tribe siap dibahas atau diperbarui.
+description: Ekspor usulan ke Excel dan siapkan web untuk dibagikan. Pakai saat project siap dibahas atau diperbarui.
 ---
 
 # Ekspor dan bagikan
@@ -9,14 +9,12 @@ description: Ekspor usulan ke Excel dan siapkan web untuk dibagikan. Pakai saat 
 
 1. Jalankan pemeriksaan penuh:
    ```bash
-   pnpm playbook check <id>
-   pnpm exec vp check
-   pnpm test
-   pnpm run build
+   node cli/playbook.ts check <id>
+   node cli/playbook.ts verifikasi
    ```
-2. Buat Excel. Hasilnya `export/event-tracker-<id>.xlsx` di folder tribe:
+2. Buat Excel. Hasilnya `projects/<id>/export/event-tracker-<id>.xlsx`:
    ```bash
-   pnpm playbook export <id>
+   node cli/playbook.ts export <id>
    ```
 3. Buka file Excel dan cek angka di sheet Ringkasan terhadap `usulan.md`.
 4. Laporkan peringatan yang tersisa dan pertanyaan terbuka.
@@ -29,4 +27,4 @@ Publikasi membuat isi repo bisa dilihat orang lain, jadi tanyakan dulu:
 - Sudahkah gambar `guide/images/` ditinjau? Build ikut menyalin slide yang dirujuk event, dan `check` tidak bisa memindai gambar.
 - Apakah repo dan hosting memakai akun organisasi?
 
-Konfigurasi Netlify ada di `netlify.toml`. Tribe dibuka lewat `/#/<id>`.
+Konfigurasi Netlify ada di `netlify.toml`. Project dibuka lewat `/#/<id>`.

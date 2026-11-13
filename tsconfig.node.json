@@ -22,6 +22,7 @@
   "include": [
     "vite.config.ts",
     "engine/plugin/usulan-plugin.ts",
+    "engine/plugin/api-plugin.ts",
     "engine/plugin/parse-usulan.ts",
     "cli",
     "**/*.test.ts"

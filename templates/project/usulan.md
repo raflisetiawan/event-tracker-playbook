@@ -6,7 +6,7 @@ dibuat: TODO-YYYY-MM-DD
 
 # Usulan Tracker {{nama}}
 
-**1 event** — perbarui jumlah ini setiap menambah event. `pnpm playbook check` akan menolak bila tidak cocok.
+**1 event** — perbarui jumlah ini setiap menambah event. `node cli/playbook.ts check <id>` akan menolak bila tidak cocok.
 
 ## Latar
 

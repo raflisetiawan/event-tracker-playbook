@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Perekam Alur Playbook",
+  "version": "0.1.0",
+  "description": "Rekam alur sebuah web menjadi panduan langkah demi langkah untuk Event Tracker Playbook.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgK1wPGwAtXuskASiQEbA1iA3qj3EykNvKiQEEg29RPWhqzJCwv8Z983RsASTqr/mkKW/h4gOeua3onrm9/+9GRjM8Z70GuzxtZkCw3LIe+3spEL5L6jUWf8nx3RVm02tQwUvabdjRnp6hXehF6B1ltxiUINvyPgAbX3tcyPVCZnBLlYN2iMtN8dbzhpzE44ECatEFPWnV3b0cXAOXorfHfGU/P9LG4pGpuLioM3mDM2a2af8pv0b1TwjcP6cHC888b+SyxLLubWvq0IFKeZQo3cDcWQzZquZ3Ngdb1NH7jzojgWisCsatZXZHZI4FZG61Pk4JlNRNPUwbbAuJKHwOwIDAQAB",
+  "minimum_chrome_version": "116",
+  "permissions": ["activeTab", "scripting", "storage", "sidePanel", "unlimitedStorage"],
+  "optional_host_permissions": ["<all_urls>"],
+  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "panel.html"
+  },
+  "action": {
+    "default_title": "Perekam Alur Playbook"
+  }
+}

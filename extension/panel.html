@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Perekam Alur Playbook</title>
+    <link rel="stylesheet" href="gaya.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Perekam Alur Playbook</h1>
+        <p class="redup">Rekam alur web menjadi panduan langkah demi langkah.</p>
+      </header>
+
+      <section id="form-mulai" class="kotak" hidden>
+        <p class="info">
+          Rekam di <b>staging atau akun demo</b>. Isian form dan teks yang mirip email, NIP, NIK,
+          atau nomor HP disamarkan otomatis, tetapi <b>nama orang tidak</b>. Periksa screenshot
+          sebelum mengekspor.
+        </p>
+        <label
+          >Judul alur<input id="judul" class="isian" placeholder="Mis. Mengajukan BCKS"
+        /></label>
+        <label
+          >Peran yang dipakai (opsional)<input
+            id="peran"
+            class="isian"
+            placeholder="Mis. Operator dinas"
+        /></label>
+        <button id="mulai" class="utama">Mulai rekam di tab ini</button>
+        <p id="pesan-mulai" class="peringatan"></p>
+      </section>
+
+      <section id="sedang-rekam" class="kotak" hidden>
+        <p><b id="judul-aktif"></b></p>
+        <p class="redup">
+          Klik seperti biasa di halaman. Tiap klik dan halaman baru menjadi satu langkah. Tulis
+          narasi dan tandai event di bawah kapan saja.
+        </p>
+        <div class="baris">
+          <button id="berhenti" class="bahaya">Berhenti</button>
+          <button id="tinjau-aktif">Tinjau &amp; ekspor</button>
+        </div>
+      </section>
+
+      <section id="langkah" class="daftar"></section>
+
+      <section class="kotak">
+        <h2>Rekaman tersimpan</h2>
+        <div id="daftar-rekaman" class="daftar"></div>
+      </section>
+    </main>
+    <script type="module" src="panel.js"></script>
+  </body>
+</html>

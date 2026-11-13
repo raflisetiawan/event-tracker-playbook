@@ -5,10 +5,13 @@ description: Susun usulan event dari pertanyaan perilaku, gap tracker, dan pandu
 
 # Susun usulan
 
-**Masukan:** `knowledge/`, gap tracker, pertanyaan Product. **Hasil:** `tribes/<id>/usulan.md`.
+**Masukan:** `knowledge/`, gap tracker, pertanyaan Product (`sumber/pertanyaan.md` dan hasil tinjauan langkah 2). **Hasil:** `projects/<id>/usulan.md`.
 
 ## Langkah
 
+0. Bila ada ZIP rekaman, baca tabel "Event yang ditandai perekam" di `rekaman.md`. Itu usulan awal dari orang yang
+   memahami aplikasinya: pakai sebagai masukan, rapikan namanya sesuai konvensi, dan tetap kaitkan ke pertanyaan perilaku.
+   Sebutkan saat melapor event mana yang ditandai perekam tetapi tidak dipakai, beserta alasannya.
 1. Mulai dari **pertanyaan perilaku** (`Q-01`, dst.), bukan dari daftar tombol. Setiap event harus menjawab minimal satu.
 2. Telusuri alur di panduan per tahap. Untuk tiap pertanyaan, tentukan titik yang perlu dicatat: halaman utama,
    keputusan, kirim, dan titik pengguna berhenti.
@@ -39,9 +42,10 @@ Ikuti pola tracker yang sudah ada bila berbeda, dan pertahankan nama event lama 
 
 ## Selesai bila
 
-`pnpm playbook check <id>` tanpa error, tanpa TODO di `usulan.md`, dan setiap event punya pertanyaan dan rujukan slide.
+`node cli/playbook.ts check <id>` tanpa error, tanpa TODO di `usulan.md`, dan setiap event punya pertanyaan dan rujukan slide.
 
 ## Titik berhenti
 
-**Berhenti di sini.** Tampilkan jumlah event per tahap dan prioritas, jalankan `pnpm playbook export <id>` untuk
-bahan diskusi, lalu minta persetujuan. Juga tanyakan alur mana yang perlu wireframe; tidak semua perlu.
+**Berhenti di sini.** Tampilkan jumlah event per tahap dan prioritas, lalu minta pengguna membuka project ini di web,
+menandai tiap event **Sudah sesuai** atau **Perlu diubah**, dan mengetik `lanjut`. Excel bisa diunduh dari halaman awal.
+Sebelum lanjut, kerjakan item berstatus `ubah` di `tinjauan.json` dan hapus itemnya. Juga tanyakan alur mana yang perlu wireframe; tidak semua perlu.

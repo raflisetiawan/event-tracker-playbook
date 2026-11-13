@@ -5,7 +5,7 @@ description: Petakan tracker yang sudah berjalan dan temukan perilaku yang belum
 
 # Audit tracker
 
-**Masukan:** akses tabel event, atau daftar event dari tim. **Hasil:** `knowledge/tracker-existing.md`.
+**Masukan:** `projects/<id>/sumber/tracker/`, akses tabel event, atau daftar event dari tim. **Hasil:** `knowledge/tracker-existing.md`.
 
 ## Langkah
 

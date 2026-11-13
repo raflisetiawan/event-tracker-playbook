@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tinjau Rekaman</title>
+    <link rel="stylesheet" href="gaya.css" />
+  </head>
+  <body class="halaman-tinjau">
+    <main class="layar">
+      <header class="kotak">
+        <input
+          id="judul"
+          class="isian"
+          aria-label="Judul alur"
+          style="font-size: 16px; font-weight: 600"
+        />
+        <div class="baris">
+          <input
+            id="peran"
+            class="isian"
+            style="flex: 1"
+            placeholder="Peran yang dipakai"
+            aria-label="Peran"
+          />
+          <span id="ringkasan" class="redup"></span>
+        </div>
+        <textarea
+          id="deskripsi"
+          class="isian"
+          rows="2"
+          placeholder="Deskripsi alur: tujuan pengguna dan kapan alur ini dipakai"
+          aria-label="Deskripsi alur"
+        ></textarea>
+        <p class="info">
+          Seret di atas screenshot untuk menutup area dengan kotak hitam, misalnya nama orang. Klik
+          kotak hitam untuk menghapusnya. Kotak merah menandai elemen yang diklik.
+        </p>
+      </header>
+
+      <section class="kotak">
+        <h2>Daftar event</h2>
+        <p class="redup">
+          Satu baris per nama event dari langkah yang dicentang "Jadikan event". Ubah nama atau tipe
+          di kartu langkah di bawah.
+        </p>
+        <div id="daftar-event"></div>
+        <div class="baris">
+          <button id="unduh-excel" class="utama">Unduh daftar event (Excel)</button>
+          <button id="cetak-pdf">Simpan PDF</button>
+        </div>
+      </section>
+
+      <section class="kotak">
+        <h2>Lanjut ke playbook (opsional)</h2>
+        <p class="redup">
+          Untuk usulan lengkap dengan atribut, prioritas, dan tur wireframe yang disusun agent.
+        </p>
+        <div class="baris">
+          <select
+            id="project"
+            class="isian"
+            style="flex: 1"
+            aria-label="Project tujuan"
+            hidden
+          ></select>
+          <button id="kirim">Kirim ke playbook</button>
+          <button id="unduh-zip">Unduh ZIP rekaman</button>
+          <button id="hapus-rekaman" class="bahaya">Hapus rekaman</button>
+        </div>
+        <p id="pesan" class="redup"></p>
+      </section>
+
+      <section id="langkah" class="daftar"></section>
+    </main>
+    <div id="cetak"></div>
+    <script type="module" src="tinjau.js"></script>
+  </body>
+</html>

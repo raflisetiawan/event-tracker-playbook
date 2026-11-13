@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "playbook",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["exec", "vp", "dev", "--port", "5174", "--strictPort"],
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vp", "dev", "--port", "5174", "--strictPort"],
       "port": 5174
     }
   ]

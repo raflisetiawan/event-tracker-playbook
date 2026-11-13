@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import clsx from "clsx";
 import { prioClass, type UsulanEvent, type UsulanIndex } from "../lib/usulan.ts";
 
@@ -5,10 +6,12 @@ export function EventCard({
   index,
   event,
   name,
+  children,
 }: {
   index: UsulanIndex;
   event: UsulanEvent | undefined;
   name: string;
+  children?: ReactNode;
 }) {
   if (!event) {
     return (
@@ -35,6 +38,8 @@ export function EventCard({
           </span>
         </div>
       </div>
+
+      {children}
 
       <dl className="space-y-3 text-sm">
         <div>

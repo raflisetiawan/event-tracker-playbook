@@ -1,5 +1,5 @@
-// Parser `usulan.md` tiap tribe → data terstruktur untuk web dan CLI.
-// Format dokumennya ada di templates/tribe/usulan.md. Sumber kebenaran tetap markdown.
+// Parser `usulan.md` → data terstruktur untuk web dan CLI.
+// Format dokumennya ada di templates/project/usulan.md. Sumber kebenaran tetap markdown.
 
 export interface UsulanEvent {
   name: string;
@@ -118,7 +118,7 @@ export type EventTrigger = "page_load" | "click" | "submit" | "system";
 
 /**
  * Aturan event_trigger: peringatan sistem = system; view_* = page_load; *_confirm atau pemicu
- * "setelah respons sukses" = submit; lainnya = click. Tribe bisa menambah pola submit lewat
+ * "setelah respons sukses" = submit; lainnya = click. Project bisa menambah pola submit lewat
  * `eventSubmitTambahan` di playbook.json.
  */
 export function eventTrigger(

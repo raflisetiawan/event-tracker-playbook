@@ -5,8 +5,9 @@ import { parseUsulan } from "./parse-usulan.ts";
 
 // Plugin Vite:
 // - `./usulan.md?usulan` → hasil parse markdown usulan (ikut reload saat file md diubah).
-// - `/slides/<tribe>/slide-NNN.png` → gambar dari `<tribe>/guide/images` (dev: dilayani langsung,
+// - `/slides/<id>/slide-NNN.png` → gambar dari `<folder>/guide/images` (dev: dilayani langsung,
 //   build: hanya slide yang dirujuk event yang ikut disalin). Gambar bersifat opsional.
+// `dirs` berisi folder induk, mis. projects dan examples; tiap subfoldernya satu hasil.
 
 const QUERY = "?usulan";
 const SLIDE = /^slide-\d{3}\.png$/;

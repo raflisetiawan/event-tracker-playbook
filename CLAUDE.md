@@ -2,5 +2,5 @@
 
 ## Khusus Claude Code
 
-- `/buat-tribe <id>` menjalankan alur tribe baru dari awal.
-- Gambar panduan di `tribes/<id>/guide/images/` bisa dibaca langsung dengan Read bila teksnya kurang jelas.
+- `/buat-usulan <id>` menjalankan alur satu project dari awal; `/terapkan-tinjauan <id>` mengerjakan tinjauan dari web.
+- Gambar panduan di `projects/<id>/guide/images/` bisa dibaca langsung dengan Read bila teksnya kurang jelas.

@@ -5,7 +5,7 @@ description: Susun langkah tur Driver.js di atas wireframe. Pakai setelah layar 
 
 # Susun tur
 
-**Masukan:** wireframe dan event yang terpasang. **Hasil:** `tribes/<id>/tours.ts`.
+**Masukan:** wireframe dan event yang terpasang. **Hasil:** `projects/<id>/tours.ts`.
 
 ## Langkah
 
@@ -30,5 +30,5 @@ description: Susun langkah tur Driver.js di atas wireframe. Pakai setelah layar 
 
 ## Selesai bila
 
-- `pnpm playbook check <id>` tanpa error. Kalau ada event yang sengaja tidak masuk tur, sebutkan saat melapor.
+- `node cli/playbook.ts check <id>` tanpa error. Kalau ada event yang sengaja tidak masuk tur, sebutkan saat melapor.
 - Semua tur dijalankan di browser sampai akhir: setiap langkah menyorot elemen yang tepat, dan tombol Selesai menutup tur.

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import clsx from "clsx";
 import { Box } from "lucide-react";
 
-// Kerangka wireframe generik: bilah atas + menu samping. Tribe bisa memakai ini apa adanya
+// Kerangka wireframe generik: bilah atas + menu samping. Project bisa memakai ini apa adanya
 // atau membuat kerangka sendiri bila aplikasinya jauh berbeda (lihat examples/ksps).
 
 export interface MenuItem {

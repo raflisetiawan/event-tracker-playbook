@@ -5,7 +5,7 @@ export const tours: Tour<State>[] = [
   {
     id: "beranda",
     title: "Beranda",
-    description: "Contoh tur satu langkah. Ganti dengan alur prioritas tribe ini.",
+    description: "Contoh tur satu langkah. Ganti dengan alur prioritas project ini.",
     questions: ["Q-01"],
     steps: [{ event: "view_beranda", target: "page-beranda", sim: { screen: "beranda" } }],
   },

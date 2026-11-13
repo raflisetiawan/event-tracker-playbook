@@ -25,3 +25,7 @@ dist-ssr
 
 # Hasil ekspor per tribe
 export/
+
+# Bahan asli tiap tribe (panduan, tracker) tetap di komputer pengguna
+sumber/
+

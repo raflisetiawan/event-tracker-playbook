@@ -1,8 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import { parseUsulan, type UsulanData } from "../engine/plugin/parse-usulan.ts";
+import { bacaTinjauan } from "./tinjauan.ts";
 
-// Pemeriksaan satu tribe. Error = harus diperbaiki; peringatan = perlu ditinjau manusia.
+// Pemeriksaan satu project atau contoh. Error = harus diperbaiki; peringatan = perlu ditinjau manusia.
 
 export interface HasilCheck {
   errors: string[];
@@ -26,7 +27,7 @@ function daftarFile(dir: string): string[] {
   });
 }
 
-/** Aturan isi dokumen usulan. Terpisah supaya bisa diuji tanpa folder tribe. */
+/** Aturan isi dokumen usulan. Terpisah supaya bisa diuji tanpa folder hasil. */
 export function periksaUsulan(md: string, data: UsulanData = parseUsulan(md)) {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -109,7 +110,9 @@ export function checkTribe(dir: string): HasilCheck {
     }
   }
 
-  const semua = daftarFile(dir);
+  const semua = daftarFile(dir).filter(
+    (f) => !path.relative(dir, f).split(path.sep).join("/").startsWith("sumber/"),
+  );
   const relatif = (f: string) => path.relative(dir, f).split(path.sep).join("/");
   const teksDari = (fs_: string[]) => fs_.map((f) => fs.readFileSync(f, "utf8")).join("\n");
 
@@ -149,7 +152,11 @@ export function checkTribe(dir: string): HasilCheck {
     }
     for (const e of belumTur) hasil.warnings.push(`${e.name}: belum ada di tur (${e.prio}).`);
   } else {
-    hasil.info.push("Belum ada wireframe: tribe ini tampil sebagai katalog event saja.");
+    hasil.info.push("Belum ada wireframe: hasil ini tampil sebagai katalog event saja.");
+  }
+
+  for (const [event, t] of Object.entries(bacaTinjauan(dir))) {
+    if (t.status === "ubah") hasil.warnings.push(`${event}: tinjauan minta diubah: ${t.catatan}`);
   }
 
   // Privasi dan sisa pekerjaan.

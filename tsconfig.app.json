@@ -24,6 +24,6 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["engine", "tribes", "examples"],
-  "exclude": ["engine/plugin/usulan-plugin.ts", "**/*.test.ts"]
+  "include": ["engine", "projects", "examples"],
+  "exclude": ["engine/plugin/usulan-plugin.ts", "engine/plugin/api-plugin.ts", "**/*.test.ts"]
 }

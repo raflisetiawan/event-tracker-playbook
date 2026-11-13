@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import clsx from "clsx";
 import { Check, X } from "lucide-react";
 
-// Komponen dasar wireframe semua tribe. Sengaja netral (abu-abu + satu warna aksen), bukan tiruan visual resmi.
+// Komponen dasar wireframe. Sengaja netral (abu-abu + satu warna aksen), bukan tiruan visual resmi.
 
 type Variant = "primary" | "dark" | "outline" | "link";
 

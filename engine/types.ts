@@ -37,7 +37,7 @@ export interface TribeConfig<S = unknown> {
   usulan: UsulanData;
   /** Pola nama event tambahan yang dikirim setelah respons API sukses (selain *_confirm). */
   eventSubmitTambahan?: string;
-  // Tanpa bagian di bawah ini, tribe tampil sebagai katalog event saja.
+  // Tanpa bagian di bawah ini, hasilnya tampil sebagai katalog event saja.
   initialState?: S;
   tours?: Tour<S>[];
   Wireframe?: ComponentType<WireframeProps<S>>;

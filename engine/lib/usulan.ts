@@ -2,7 +2,7 @@ import { eventTrigger, type UsulanData, type UsulanEvent } from "../plugin/parse
 
 export type { UsulanEvent };
 
-/** Indeks satu tribe: pencarian event/pertanyaan/atribut dan URL gambar slide. */
+/** Indeks satu project atau contoh: pencarian event/pertanyaan/atribut dan URL gambar slide. */
 export function createIndex(tribe: {
   id: string;
   usulan: UsulanData;

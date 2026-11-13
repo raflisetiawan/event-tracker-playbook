@@ -2,16 +2,19 @@ import { useMemo, useState } from "react";
 import clsx from "clsx";
 import type { UsulanData } from "../plugin/parse-usulan.ts";
 import { prioClass, type UsulanIndex } from "../lib/usulan.ts";
+import { LabelTinjauan, type Tinjauan } from "./TinjauanEvent.tsx";
 
-// Tampilan dasar semua tribe: daftar event yang bisa difilter. Cukup butuh usulan.md.
+// Tampilan dasar setiap hasil: daftar event yang bisa difilter. Cukup butuh usulan.md.
 
 export function Katalog({
   usulan,
   index,
+  tinjauan,
   onPilih,
 }: {
   usulan: UsulanData;
   index: UsulanIndex;
+  tinjauan: Tinjauan | null;
   onPilih: (name: string) => void;
 }) {
   const [cari, setCari] = useState("");
@@ -65,7 +68,15 @@ export function Katalog({
         <table className="w-full text-left text-xs">
           <thead className="bg-slate-50 text-[10px] tracking-wide text-slate-500 uppercase">
             <tr>
-              {["Event", "Tahap", "Pemicu", "Trigger", "Prio", "Status"].map((h) => (
+              {[
+                "Event",
+                "Tahap",
+                "Pemicu",
+                "Trigger",
+                "Prio",
+                "Status",
+                ...(tinjauan ? ["Tinjauan"] : []),
+              ].map((h) => (
                 <th key={h} className="px-3 py-2 font-medium">
                   {h}
                 </th>
@@ -92,6 +103,11 @@ export function Katalog({
                   </span>
                 </td>
                 <td className="px-3 py-2">{e.status}</td>
+                {tinjauan && (
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    <LabelTinjauan item={tinjauan[e.name]} />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

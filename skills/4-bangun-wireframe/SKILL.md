@@ -5,7 +5,7 @@ description: Bangun wireframe React layar produk dan pasang event simulasi. Paka
 
 # Bangun wireframe
 
-**Masukan:** `usulan.md` yang disetujui dan panduan. **Hasil:** `tribes/<id>/wireframe/`.
+**Masukan:** `usulan.md` yang disetujui dan panduan. **Hasil:** `projects/<id>/wireframe/`.
 
 Baca `examples/ksps/wireframe/` dulu. Mulai dari alur P0 yang dipilih, lalu tambah alur lain.
 
@@ -33,6 +33,6 @@ Baca `examples/ksps/wireframe/` dulu. Mulai dari alur P0 yang dipilih, lalu tamb
 
 ## Selesai bila
 
-- `pnpm exec vp check` dan `pnpm playbook check <id>` tanpa error.
+- `node cli/playbook.ts verifikasi` dan `node cli/playbook.ts check <id>` tanpa error.
 - Alur sudah diklik dari awal sampai akhir di browser, dan tab **Log event** tidak menampilkan
   "Tidak ada di dokumen usulan" atau "Atribut belum dikirim".

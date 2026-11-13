@@ -5,6 +5,7 @@ import { Play, RotateCcw } from "lucide-react";
 import { EventCard } from "./components/EventCard.tsx";
 import { EventLog, type LoggedEvent } from "./components/EventLog.tsx";
 import { Katalog } from "./components/Katalog.tsx";
+import { FormTinjauan, useTinjauan } from "./components/TinjauanEvent.tsx";
 import { countBy, createIndex, popoverHtml, prioClass, type UsulanIndex } from "./lib/usulan.ts";
 import type { AttrValue, TribeConfig } from "./types.ts";
 import { TrackerContext, type Track } from "./wireframe/tracker.tsx";
@@ -45,6 +46,7 @@ export function TourApp<S>({
   tribeIds: string[];
   onPilihTribe: (id: string) => void;
 }) {
+  const [tinjauan, setTinjauan] = useTinjauan(tribe.id);
   const index = useMemo(() => createIndex(tribe), [tribe]);
   const tours = useMemo(() => tribe.tours ?? [], [tribe]);
   const adaWireframe = Boolean(tribe.Wireframe && tribe.initialState !== undefined);
@@ -178,12 +180,15 @@ export function TourApp<S>({
           <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-3">
             <div className="flex items-center gap-3">
               <div>
+                <a href="#/" className="text-xs text-sky-700 hover:underline">
+                  ← Halaman awal
+                </a>
                 <h1 className="text-lg font-semibold text-slate-900">Usulan Event: {tribe.nama}</h1>
                 <p className="text-xs text-slate-500">{tribe.usulan.status}</p>
               </div>
               {tribeIds.length > 1 && (
                 <select
-                  aria-label="Pilih tribe"
+                  aria-label="Pilih project"
                   value={tribe.id}
                   onChange={(e) => onPilihTribe(e.target.value)}
                   className="rounded-md border border-slate-300 px-2 py-1.5 text-sm"
@@ -314,6 +319,7 @@ export function TourApp<S>({
               <Katalog
                 usulan={tribe.usulan}
                 index={index}
+                tinjauan={tinjauan}
                 onPilih={(name) => {
                   setFocusEvent(name);
                   setPanel("detail");
@@ -349,7 +355,17 @@ export function TourApp<S>({
                     index={index}
                     event={index.eventsByName.get(focusEvent)}
                     name={focusEvent}
-                  />
+                  >
+                    {import.meta.env.DEV && tinjauan && (
+                      <FormTinjauan
+                        projectId={tribe.id}
+                        key={focusEvent}
+                        event={focusEvent}
+                        item={tinjauan[focusEvent]}
+                        onUbah={setTinjauan}
+                      />
+                    )}
+                  </EventCard>
                 ) : (
                   <EventLog
                     log={log}

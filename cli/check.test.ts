@@ -1,14 +1,19 @@
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vite-plus/test";
 import { eventTrigger, parseUsulan } from "../engine/plugin/parse-usulan.ts";
 import { cariPii, checkTribe, periksaUsulan } from "./check.ts";
+import { ekstensiDiizinkan, namaFileAman } from "./project.ts";
+import { ekstrakZip } from "./zip.ts";
+// @ts-expect-error modul JavaScript extension tanpa deklarasi tipe
+import { buatZip } from "../extension/lib/zip.js";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
-const TEMPLATE = fs.readFileSync(path.join(ROOT, "templates/tribe/usulan.md"), "utf8");
+const TEMPLATE = fs.readFileSync(path.join(ROOT, "templates/project/usulan.md"), "utf8");
 
 describe("parseUsulan", () => {
-  it("membaca template tribe", () => {
+  it("membaca template project", () => {
     const d = parseUsulan(TEMPLATE);
     expect(d.events.map((e) => e.name)).toEqual(["view_beranda"]);
     expect(d.questions).toHaveLength(1);
@@ -64,5 +69,47 @@ describe("checkTribe", () => {
     expect(h.errors).toEqual([]);
     expect(h.terpasang).toBe(104);
     expect(h.diTur).toBe(104);
+  });
+});
+
+describe("nama file upload", () => {
+  it("menolak path dan karakter terlarang", () => {
+    expect(namaFileAman("panduan produk.pdf")).toBe("panduan produk.pdf");
+    expect(namaFileAman("../rahasia.pdf")).toBeNull();
+    expect(namaFileAman("..\\rahasia.pdf")).toBeNull();
+    expect(namaFileAman("C:evil.pdf")).toBeNull();
+    expect(namaFileAman(".env")).toBeNull();
+  });
+
+  it("hanya menerima ekstensi sesuai kategori", () => {
+    expect(ekstensiDiizinkan("panduan", "a.PDF")).toBe(true);
+    expect(ekstensiDiizinkan("panduan", "a.exe")).toBe(false);
+    expect(ekstensiDiizinkan("tracker", "a.pdf")).toBe(false);
+  });
+});
+
+describe("ekstrak ZIP", () => {
+  const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), "zip-uji-"));
+
+  it("membuka ZIP dari extension, termasuk subfolder", () => {
+    const dir = tmp();
+    const zip = Buffer.from(
+      buatZip([
+        { nama: "rekaman.md", data: "# Uji" },
+        { nama: "gambar/langkah-001.png", data: new Uint8Array([1, 2, 3]) },
+      ]),
+    );
+    ekstrakZip(zip, path.join(dir, "rekaman"));
+    expect(fs.readFileSync(path.join(dir, "rekaman", "rekaman.md"), "utf8")).toBe("# Uji");
+    expect([...fs.readFileSync(path.join(dir, "rekaman", "gambar", "langkah-001.png"))]).toEqual([
+      1, 2, 3,
+    ]);
+  });
+
+  it("menolak path yang keluar dari folder tujuan", () => {
+    const dir = tmp();
+    const zip = Buffer.from(buatZip([{ nama: "../jahat.txt", data: "x" }]));
+    expect(() => ekstrakZip(zip, path.join(dir, "rekaman"))).toThrow(/tidak diizinkan/);
+    expect(fs.existsSync(path.join(dir, "jahat.txt"))).toBe(false);
   });
 });
