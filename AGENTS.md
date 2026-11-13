@@ -12,6 +12,10 @@ Pengguna membuat project dan mengupload bahan di halaman awal (`npm run dev`), l
 Bahan ada di `projects/<id>/sumber/`: `panduan/` (termasuk ZIP rekaman dari extension `extension/`), `tracker/`, `lain/`, dan `pertanyaan.md`. Folder ini tidak masuk git:
 jangan menyalin isinya mentah-mentah ke file yang di-commit, dan jangan memindahkannya keluar dari folder itu.
 
+Langkah kerjanya juga tertulis di `.claude/commands/buat-usulan.md` dan `terapkan-tinjauan.md`. Claude Code menjalankannya
+sebagai `/buat-usulan <id>`; agent lain (Codex, OpenCode, dll.) diminta membaca file itu langsung, dengan `$ARGUMENTS`
+berarti id project.
+
 Jalankan skill berurutan. Baca `SKILL.md`-nya sebelum mengerjakan tiap langkah.
 
 | #   | Skill                       | Masukan                            | Hasil                           | Setelahnya                      |

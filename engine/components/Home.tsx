@@ -11,6 +11,7 @@ import {
   Trash2,
   Upload,
 } from "lucide-react";
+import { AGENTS, perintahPasang, type Agent } from "../lib/agent.ts";
 import { api, kirimJson } from "../lib/api.ts";
 
 // Halaman awal: tutorial dan upload bahan. Web tidak menjalankan AI; setelah bahan lengkap,
@@ -39,7 +40,7 @@ interface Lingkungan {
   root: string;
   pemisah: string;
   platform: string;
-  agentTerpasang: boolean;
+  agen: Record<string, boolean>;
 }
 
 const ukuran = (b: number) =>
@@ -50,7 +51,10 @@ const ukuran = (b: number) =>
 const LANGKAH_TUTORIAL = [
   ["Buat project", "Beri nama project, mis. nama produk yang dibuatkan tracker."],
   ["Upload bahan", "Panduan produk wajib ada. Tracker dan dokumen lain membantu agent."],
-  ["Jalankan agent", "Klik Buka terminal, lalu salin perintah yang disediakan."],
+  [
+    "Jalankan agent",
+    "Pilih agent (Claude Code, Codex, OpenCode, atau lainnya), lalu salin perintahnya.",
+  ],
   ["Tinjau hasilnya", "Tandai tiap event langsung di web. Agent memperbaiki yang Anda tandai."],
 ] as const;
 
@@ -149,6 +153,7 @@ function Persiapan({
     return () => removeEventListener("focus", muatUlang);
   }, [muat]);
 
+  const [agent, pilihAgent] = useAgent(lingkungan);
   const project = projects.find((p) => p.id === projectTerpilih);
   const perbarui = (s: StatusProject) =>
     setProjects((l) =>
@@ -211,8 +216,15 @@ function Persiapan({
             ))}
             <Pertanyaan key={project.id} project={project} onUbah={perbarui} />
           </section>
-          <JalankanAgent project={project} lingkungan={lingkungan} />
-          {project.langkah[2].selesai && <TinjauHasil project={project} />}
+          <JalankanAgent
+            project={project}
+            lingkungan={lingkungan}
+            agent={agent}
+            onPilihAgent={pilihAgent}
+          />
+          {project.langkah[2].selesai && (
+            <TinjauHasil project={project} lingkungan={lingkungan} agent={agent} />
+          )}
         </>
       )}
     </>
@@ -517,25 +529,125 @@ function BarisPerintah({ perintah }: { perintah: string }) {
   );
 }
 
-const PASANG_AGENT: Record<string, string> = {
-  win32:
-    "curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd",
-  darwin: "curl -fsSL https://claude.ai/install.sh | bash",
-  linux: "curl -fsSL https://claude.ai/install.sh | bash",
-};
+const KUNCI_AGENT = "playbook-agent";
+
+/** Agent pilihan pengguna, diingat di browser. Bawaannya agent pertama yang sudah terpasang. */
+function useAgent(lingkungan: Lingkungan | null) {
+  const [pilihan, setPilihan] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem(KUNCI_AGENT);
+    } catch {
+      return null;
+    }
+  });
+  const bawaan = AGENTS.find((a) => a.program && lingkungan?.agen[a.program]) ?? AGENTS[0];
+  const agent = AGENTS.find((a) => a.id === pilihan) ?? bawaan;
+  const pilih = (id: string) => {
+    setPilihan(id);
+    try {
+      localStorage.setItem(KUNCI_AGENT, id);
+    } catch {
+      // Penyimpanan browser tidak tersedia; pilihan tetap berlaku sampai halaman ditutup.
+    }
+  };
+  return [agent, pilih] as const;
+}
+
+function PilihAgent({
+  agent,
+  lingkungan,
+  onPilih,
+}: {
+  agent: Agent;
+  lingkungan: Lingkungan | null;
+  onPilih: (id: string) => void;
+}) {
+  return (
+    <div role="radiogroup" aria-label="AI agent" className="flex flex-wrap gap-1.5">
+      {AGENTS.map((a) => {
+        const ada = a.program ? lingkungan?.agen[a.program] : undefined;
+        return (
+          <button
+            key={a.id}
+            type="button"
+            role="radio"
+            aria-checked={a.id === agent.id}
+            onClick={() => onPilih(a.id)}
+            className={clsx(
+              "flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs",
+              a.id === agent.id
+                ? "border-sky-500 bg-sky-50 font-medium text-sky-900"
+                : "border-slate-300 text-slate-700 hover:bg-slate-50",
+            )}
+          >
+            {ada !== undefined && (
+              <span
+                aria-hidden
+                className={clsx("size-1.5 rounded-full", ada ? "bg-emerald-500" : "bg-slate-300")}
+              />
+            )}
+            {a.label}
+            {ada && <span className="sr-only">(terpasang)</span>}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Perintah pasang (bila agent belum ada) lalu perintah menjalankan satu aksi. */
+function PerintahAgent({
+  agent,
+  lingkungan,
+  baris,
+}: {
+  agent: Agent;
+  lingkungan: Lingkungan | null;
+  baris: string[];
+}) {
+  const pasang =
+    agent.program && lingkungan && !lingkungan.agen[agent.program]
+      ? perintahPasang(agent, lingkungan.platform)
+      : null;
+  return (
+    <div className="space-y-1.5">
+      {pasang && (
+        <>
+          <p className="text-xs text-amber-800">
+            {agent.label} belum terpasang. Jalankan ini sekali di terminal, lalu tutup terminal dan
+            buka lagi:
+          </p>
+          <BarisPerintah perintah={pasang} />
+        </>
+      )}
+      {agent.program === null && (
+        <p className="text-xs text-slate-600">
+          Jalankan agent Anda di folder playbook, lalu tempel prompt ini. Agent perlu bisa membaca
+          file dan menjalankan perintah di terminal.
+        </p>
+      )}
+      {baris.map((b) => (
+        <BarisPerintah key={b} perintah={b} />
+      ))}
+    </div>
+  );
+}
 
 function JalankanAgent({
   project,
   lingkungan,
+  agent,
+  onPilihAgent,
 }: {
   project: StatusProject;
   lingkungan: Lingkungan | null;
+  agent: Agent;
+  onPilihAgent: (id: string) => void;
 }) {
   const [pesan, setPesan] = useState("");
   const belumWajib = project.bahan.filter((b) => b.wajib && b.files.length === 0);
   const selesai = project.langkah.filter((l) => l.selesai).length;
   const opsionalKosong = project.bahan.filter((b) => !b.wajib && b.files.length === 0);
-  const pasang = lingkungan && !lingkungan.agentTerpasang && PASANG_AGENT[lingkungan.platform];
 
   return (
     <section
@@ -572,22 +684,12 @@ function JalankanAgent({
             <Terminal size={14} /> Buka terminal
           </button>
           {pesan && <p className="text-xs text-slate-600">{pesan}</p>}
-          <div className="space-y-1.5">
-            {pasang && (
-              <>
-                <p className="text-xs text-amber-800">
-                  Claude Code belum terpasang. Jalankan ini sekali di terminal, lalu tutup terminal
-                  dan klik Buka terminal lagi:
-                </p>
-                <BarisPerintah perintah={pasang} />
-              </>
-            )}
-            <BarisPerintah perintah="claude" />
-            <BarisPerintah perintah={`/buat-usulan ${project.id}`} />
-          </div>
-          <p className="text-xs text-slate-500">
-            Memakai agent lain? Minta agent mengikuti <code>AGENTS.md</code>.
-          </p>
+          <PilihAgent agent={agent} lingkungan={lingkungan} onPilih={onPilihAgent} />
+          <PerintahAgent
+            agent={agent}
+            lingkungan={lingkungan}
+            baris={agent.jalankan("buat-usulan", project.id)}
+          />
         </>
       ) : (
         <p className="rounded-lg bg-amber-50 p-3 text-xs text-amber-900">
@@ -626,7 +728,15 @@ interface HasilPeriksa {
   warnings: string[];
 }
 
-function TinjauHasil({ project }: { project: StatusProject }) {
+function TinjauHasil({
+  project,
+  lingkungan,
+  agent,
+}: {
+  project: StatusProject;
+  lingkungan: Lingkungan | null;
+  agent: Agent;
+}) {
   const [hasil, setHasil] = useState<HasilPeriksa | null>(null);
   const [error, setError] = useState("");
   const { sesuai, ubah, jumlahEvent } = project.tinjauan;
@@ -682,9 +792,13 @@ function TinjauHasil({ project }: { project: StatusProject }) {
       {ubah > 0 && (
         <div className="space-y-1.5">
           <p className="text-xs text-slate-600">
-            Ada {ubah} event yang perlu diubah. Jalankan ini di terminal agent:
+            Ada {ubah} event yang perlu diubah. Jalankan ini di terminal ({agent.label}):
           </p>
-          <BarisPerintah perintah={`/terapkan-tinjauan ${project.id}`} />
+          <PerintahAgent
+            agent={agent}
+            lingkungan={lingkungan}
+            baris={agent.jalankan("terapkan-tinjauan", project.id)}
+          />
         </div>
       )}
       {hasil && (

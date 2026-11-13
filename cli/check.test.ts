@@ -2,6 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vite-plus/test";
+import { AGENTS, perintahPasang, promptAksi } from "../engine/lib/agent.ts";
 import { eventTrigger, parseUsulan } from "../engine/plugin/parse-usulan.ts";
 import { cariPii, checkTribe, periksaUsulan } from "./check.ts";
 import { ekstensiDiizinkan, namaFileAman } from "./project.ts";
@@ -111,5 +112,35 @@ describe("ekstrak ZIP", () => {
     const zip = Buffer.from(buatZip([{ nama: "../jahat.txt", data: "x" }]));
     expect(() => ekstrakZip(zip, path.join(dir, "rekaman"))).toThrow(/tidak diizinkan/);
     expect(fs.existsSync(path.join(dir, "jahat.txt"))).toBe(false);
+  });
+});
+
+describe("perintah agent", () => {
+  const agent = (id: string) => AGENTS.find((a) => a.id === id)!;
+
+  it("Claude Code memakai perintah garis miring, agent lain memakai prompt", () => {
+    expect(agent("claude").jalankan("buat-usulan", "portal")).toEqual([
+      "claude",
+      "/buat-usulan portal",
+    ]);
+    expect(agent("codex").jalankan("terapkan-tinjauan", "portal")[0]).toBe(
+      `codex "${promptAksi("terapkan-tinjauan", "portal")}"`,
+    );
+    expect(agent("opencode").jalankan("buat-usulan", "portal")[0]).toMatch(/^opencode --prompt "/);
+    expect(promptAksi("buat-usulan", "portal")).toContain(".claude/commands/buat-usulan.md");
+  });
+
+  it("prompt aman ditempel di dalam tanda kutip shell", () => {
+    for (const aksi of ["buat-usulan", "terapkan-tinjauan"] as const) {
+      expect(promptAksi(aksi, "portal-guru")).not.toMatch(/[$`"'\\]/);
+    }
+  });
+
+  it("setiap agent yang bisa dicek punya perintah pasang di semua platform", () => {
+    for (const a of AGENTS.filter((x) => x.program)) {
+      for (const platform of ["win32", "darwin", "linux"]) {
+        expect(perintahPasang(a, platform), `${a.id} di ${platform}`).toBeTruthy();
+      }
+    }
   });
 });

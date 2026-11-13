@@ -7,6 +7,7 @@ import { pipeline } from "node:stream/promises";
 import type { Plugin } from "vite-plus";
 import { checkTribe } from "../../cli/check.ts";
 import { ekstrakZip } from "../../cli/zip.ts";
+import { PROGRAM_AGENT } from "../lib/agent.ts";
 import { bacaTinjauan, simpanTinjauan } from "../../cli/tinjauan.ts";
 import {
   adalahKategori,
@@ -59,11 +60,11 @@ function kirim(res: ServerResponse, status: number, data: unknown) {
   res.end(JSON.stringify(data));
 }
 
-/** Apakah perintah `claude` bisa dijalankan. Installer resminya memasang ke ~/.local/bin. */
-function agentTerpasang() {
+/** Apakah program agent bisa dijalankan. Installer resmi Claude Code memasang ke ~/.local/bin. */
+function terpasang(program: string) {
   const cari = process.platform === "win32" ? "where" : "which";
-  if (spawnSync(cari, ["claude"], { stdio: "ignore" }).status === 0) return true;
-  const nama = process.platform === "win32" ? "claude.exe" : "claude";
+  if (spawnSync(cari, [program], { stdio: "ignore" }).status === 0) return true;
+  const nama = process.platform === "win32" ? `${program}.exe` : program;
   return fs.existsSync(path.join(os.homedir(), ".local", "bin", nama));
 }
 
@@ -104,7 +105,7 @@ export function apiPlugin(options: { root: string }): Plugin {
               root,
               pemisah: path.sep,
               platform: process.platform,
-              agentTerpasang: agentTerpasang(),
+              agen: Object.fromEntries(PROGRAM_AGENT.map((p) => [p, terpasang(p)])),
             });
           }
           if (sumberDaya === "buka-terminal" && req.method === "POST") {

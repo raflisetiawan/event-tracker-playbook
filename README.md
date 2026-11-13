@@ -21,7 +21,8 @@ Cara cepat bisa jadi bahan cara lengkap: rekaman dari extension dikirim ke proje
 ## Syarat
 
 - [Node.js](https://nodejs.org) 24 atau lebih baru. npm sudah ikut terpasang bersama Node.
-- AI coding agent: [Claude Code](https://code.claude.com), atau agent lain yang bisa membaca `AGENTS.md`.
+- AI coding agent: [Claude Code](https://code.claude.com), [Codex](https://github.com/openai/codex),
+  [OpenCode](https://opencode.ai), atau agent lain yang bisa membaca file dan menjalankan perintah di terminal.
 - Untuk extension: Chrome atau Edge dengan Developer mode diizinkan.
 
 ## Mulai
@@ -36,7 +37,8 @@ Buka `http://localhost:5173`, lalu:
 1. **Buat project** di halaman awal, mis. satu project per produk.
 2. **Upload bahan**. Panduan produk wajib ada (PDF, PPTX, screenshot, atau ZIP rekaman extension); tracker yang sudah
    ada, dokumen lain, dan pertanyaan Product membantu agent.
-3. **Jalankan agent.** Klik **Buka terminal**, lalu jalankan perintah yang ditampilkan:
+3. **Jalankan agent.** Pilih agent (Claude Code, Codex, OpenCode, atau lainnya), klik **Buka terminal**, lalu jalankan
+   perintah yang ditampilkan. Untuk Claude Code:
 
    ```text
    claude
@@ -73,7 +75,13 @@ penting; nama event disarankan otomatis sesuai konvensi. Hasilnya bisa diunduh s
 | `/buat-usulan <id-project>`       | Menjalankan enam langkah kerja dari panduan sampai tur  |
 | `/terapkan-tinjauan <id-project>` | Mengerjakan event yang ditandai **Perlu diubah** di web |
 
-Agent lain cukup diminta mengikuti `AGENTS.md`.
+**Codex, OpenCode, atau agent lain** membaca file langkah yang sama lewat prompt. Halaman awal menyediakan
+pilihan agent beserta perintah siap salin, mis.:
+
+```text
+codex "Kerjakan project <id>: ikuti AGENTS.md dan langkah di .claude/commands/buat-usulan.md, dengan id project <id>."
+opencode --prompt "Kerjakan project <id>: ikuti AGENTS.md dan langkah di .claude/commands/buat-usulan.md, dengan id project <id>."
+```
 
 **CLI** (dipakai agent, bisa juga manual):
 
